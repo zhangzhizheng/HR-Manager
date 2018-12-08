@@ -3,11 +3,8 @@ package cn.my.hr.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-<<<<<<< HEAD
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -57,7 +54,6 @@ public class Panel14 extends JPanel {
 	public Panel14() {
 		setLayout(new BorderLayout());
 		initTop();
-<<<<<<< HEAD
 	}
 	public void initTop() {
 		pTop=new JPanel();
@@ -72,19 +68,6 @@ public class Panel14 extends JPanel {
 		cons.gridy = 0;
 		gridBag.setConstraints(lbTitle, cons);
 		pTop.add(lbTitle);
-=======
-		initCenter();
-		
-	}
-	public void initTop() {
-		JLabel lbTitle = new JLabel("人员信息查询");
-		lbTitle.setFont(new Font("宋体",0,16));
-		pTop=new JPanel();
-     	pTop.add(lbTitle);
-     	add(pTop,BorderLayout.NORTH);
-	}
-	public void initCenter() {
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 		String []colTitle=new String[] {"编号","姓名"
 				,"出生年月","民族","地址","部门"};
 		String [][]colvalue=new String[10][6];
@@ -111,17 +94,12 @@ public class Panel14 extends JPanel {
 		});
 		js=new JScrollPane(table);
 		js.setPreferredSize(new Dimension(430,300));
-<<<<<<< HEAD
 		cons = new GridBagConstraints();
 		cons.gridx = 0;
 		cons.gridy = 1;
 		gridBag.setConstraints(js, cons);
 		pTop.add(js);
 		add(pTop,BorderLayout.NORTH);
-=======
-		pTop.add(js);
-		add(pTop,BorderLayout.CENTER);
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 	}
 
 }

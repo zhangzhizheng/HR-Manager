@@ -1,10 +1,7 @@
 package cn.hr.dao;
 
-<<<<<<< HEAD
 import static org.hamcrest.CoreMatchers.nullValue;
 
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,10 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-<<<<<<< HEAD
 import javax.swing.text.Position;
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 
 import org.junit.Test;
 
@@ -25,7 +19,6 @@ import cn.hr.model.Dept;
 import cn.hr.utils.DBUtils;
 
 public class DeptDao {
-<<<<<<< HEAD
 	
 	
 	/**
@@ -36,30 +29,13 @@ public class DeptDao {
 	public  String [][] getDeptDao() {
 		//获取连接
 		Connection conn = DBUtils.getConnection();
-=======
-	//以二维数据形式返回所有给出部门数据
-	@Test
-	public  String [][] getDeptDao() {
-		//获取连接
-		Connection conn = null;
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		//存储数据用的集合类
 	    List<Dept> list=new LinkedList<Dept>();
 	    String [][] data=null;
-<<<<<<< HEAD
 		//执行SQL语句
 		String sql = "select * from Dept";
-=======
-		try {
-			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-			conn = DriverManager.getConnection("jdbc:ucanaccess://Hr.accdb");
-		} catch (Exception e) {
-		}
-		//执行SQL语句
-		String sql = "select * from Dept order by DeptID";
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -73,11 +49,7 @@ public class DeptDao {
 				Dept dept=new Dept();
 				dept.setDeptID(rs.getLong("DeptID"));
 				dept.setB_Dept(rs.getString("B_Dept"));
-<<<<<<< HEAD
 				dept.setS_Dept(rs.getString("S_Dept"));
-=======
-				dept.setS_Dept(rs.getString("D_Dept"));
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 				//System.out.println(DeptID+"-"+dept1Name+"-"+dept2Name);
 				list.add(dept);
 			}
@@ -101,7 +73,6 @@ public class DeptDao {
 		return data;
 		
 	}
-<<<<<<< HEAD
 	/**
 	 * //插入信息
 	 */
@@ -176,8 +147,6 @@ public class DeptDao {
 		return null;
 		
 	}
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 	public static void main(String []args) {
 		DeptDao deptDao=new DeptDao();
 		String [][]data=deptDao.getDeptDao();

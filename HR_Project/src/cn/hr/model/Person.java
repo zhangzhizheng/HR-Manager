@@ -13,7 +13,6 @@ public class Person {
 	private String Other;
 	//补充属性
 	private String B_Dept;
-<<<<<<< HEAD
 	public Person() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -33,8 +32,6 @@ public class Person {
 		Other = other;
 		B_Dept = b_Dept;
 	}
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 	public long getPersonID() {
 		return PersonID;
 	}

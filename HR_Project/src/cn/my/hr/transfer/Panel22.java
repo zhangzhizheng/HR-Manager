@@ -3,11 +3,8 @@ package cn.my.hr.transfer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-<<<<<<< HEAD
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -37,7 +34,6 @@ public class Panel22 extends JPanel {
 	public Panel22() {
 		setLayout(new BorderLayout());
 		initTop();
-<<<<<<< HEAD
 	}
 	public void initTop() {
 		pTop=new JPanel();
@@ -52,19 +48,6 @@ public class Panel22 extends JPanel {
 		cons.gridy = 0;
 		gridBag.setConstraints(lbTitle, cons);
 		pTop.add(lbTitle);
-=======
-		initCenter();
-	}
-	public void initTop() {
-		JLabel lbTitle = new JLabel("调动历史查询");
-		lbTitle.setFont(new Font("宋体",0,16));
-		pTop=new JPanel();
-     	pTop.add(lbTitle);
-     	add(pTop,BorderLayout.NORTH);
-	}
-	public void initCenter() {
-		pCenter=new JPanel();
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 		String []colTitle=new String[] {"流水号","人员姓名"
 				,"原部门","新部门","变更次数","变更日期"};
 		String [][]colvalue=new String[10][6];
@@ -80,16 +63,11 @@ public class Panel22 extends JPanel {
 		table.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		js=new JScrollPane(table);
 		js.setPreferredSize(new Dimension(430,300));
-<<<<<<< HEAD
 		cons = new GridBagConstraints();
 		cons.gridx = 0;
 		cons.gridy = 1;
 		gridBag.setConstraints(js, cons);
 		pTop.add(js);
 		add(pTop,BorderLayout.NORTH);
-=======
-		pCenter.add(js);
-		add(pCenter,BorderLayout.CENTER);
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 	}
 }

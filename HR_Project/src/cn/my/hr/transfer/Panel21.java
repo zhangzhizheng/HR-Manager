@@ -3,11 +3,8 @@ package cn.my.hr.transfer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-<<<<<<< HEAD
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -57,7 +54,6 @@ public class Panel21 extends JPanel implements  ActionListener{
 		
 	}
 	public void initTop() {
-<<<<<<< HEAD
 		pTop=new JPanel();
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints cons = null;
@@ -70,12 +66,6 @@ public class Panel21 extends JPanel implements  ActionListener{
 		cons.gridy = 0;
 		gridBag.setConstraints(lbTitle, cons);
 		pTop.add(lbTitle);
-=======
-		JLabel lbTitle = new JLabel("人员调动");
-		lbTitle.setFont(new Font("宋体",0,16));
-		pTop=new JPanel();
-    	pTop.add(lbTitle);
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 		String []colTitle=new String[] {"工号","姓名"
 				,"性别","部门","薪酬","考核信息"};
 		String [][]colvalue=new String[10][6];
@@ -101,13 +91,10 @@ public class Panel21 extends JPanel implements  ActionListener{
 		});
 		js=new JScrollPane(table);
 		js.setPreferredSize(new Dimension(430,300));
-<<<<<<< HEAD
 		cons = new GridBagConstraints();
 		cons.gridx = 0;
 		cons.gridy = 1;
 		gridBag.setConstraints(js, cons);
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 		pTop.add(js);
 		add(pTop,BorderLayout.NORTH);
 	}

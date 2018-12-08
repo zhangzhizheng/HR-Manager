@@ -4,7 +4,6 @@ public class Dept {
 	private long DeptID;
 	private String B_Dept;
 	private String  S_Dept;
-<<<<<<< HEAD
 	
 	public Dept() {
 		super();
@@ -15,8 +14,6 @@ public class Dept {
 		B_Dept = b_Dept;
 		S_Dept = s_Dept;
 	}
-=======
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 	public long getDeptID() {
 		return DeptID;
 	}

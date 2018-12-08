@@ -1,7 +1,6 @@
 package cn.hr.model;
 
 public class History {
-<<<<<<< HEAD
 	private String JourNo;//变动历史编号
 	private String FromAcc;//变动类型
 	private String OldInfo;//原类型
@@ -74,9 +73,4 @@ public class History {
 	public void setName(String name) {
 		this.name = name;
 	}
-=======
-	private long JourNo ;
-	private String FormAC;
-	
->>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 }

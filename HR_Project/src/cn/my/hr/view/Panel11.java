@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,12 +16,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import cn.hr.dao.DeptDao;
+import cn.hr.dao.PersonDao;
 /**
  * 添加人员信息
  * @author 409
  *
  */
-public class Panel11 extends JPanel{
+public class Panel11 extends JPanel implements ActionListener{
 	//JPanel pTitle;  //标题区域面板
 	JPanel pContent;  //添加人员信息内容区域面板
 	JScrollPane js;   //添加人员信息所在的滚动面板
@@ -59,6 +66,12 @@ public class Panel11 extends JPanel{
 		cons.gridy = 1;
 		gridBag.setConstraints(js, cons);
 		add(js);
+        try {
+			addListener();//添加监听
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void initContent() {
 		//创建内容面板并设置布局方式
@@ -188,6 +201,14 @@ public class Panel11 extends JPanel{
 		cons.gridx = 1;
 		cons.gridy = 3;
 		cons.insets = new Insets(10,1,10,15);
+		
+		DeptDao deptDao = new DeptDao();
+		try {
+			String[] values = deptDao.getDeptsForSelect();//获取部门列表
+			comboDept = new JComboBox(values);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		layout.setConstraints(comboDept, cons);
 		pContent.add(comboDept);
 		//其他标签
@@ -226,5 +247,38 @@ public class Panel11 extends JPanel{
 		cons.insets = new Insets(10,10,10,10);
 		layout.setConstraints(btnClear, cons);
 		pContent.add(btnClear);
+	}
+	/**
+	 * 为按钮添加监听器
+	 * @throws Exception
+	 */
+	public void addListener() throws Exception{
+		btnAdd.addActionListener(this);
+		btnClear.addActionListener(this);
+	}
+	/**
+	 * 点击清空按钮，清空文本框所有值
+	 */
+	public void setNull(){
+		tfPersonId.setText(null);
+		tfName.setText(null);
+		tfSex.setText(null);
+		tfBirth.setText(null);
+		tfAddress.setText(null);
+		tfOther.setText(null);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		//清空执行的事件
+		if(e.getSource()==btnClear){
+			setNull();
+		}
+		//添加信息
+		if(e.getSource()==btnAdd){
+			PersonDao personDao=new PersonDao();
+			personDao.addPerson(person);
+		}
+		
 	} 
 }
