@@ -14,6 +14,10 @@ public class JdbcAccess {
 		Connection conn = null;
 		//获取连接
 		try {
+<<<<<<< HEAD
+			
+=======
+>>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
 			conn = DriverManager.getConnection("jdbc:ucanaccess://Hr.accdb");
 		} catch (Exception e) {

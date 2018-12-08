@@ -13,6 +13,28 @@ public class Person {
 	private String Other;
 	//补充属性
 	private String B_Dept;
+<<<<<<< HEAD
+	public Person() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Person(long personID, String name, String sex, String birth, String nat, String address, long deptID,
+			long salary, String assess, String other, String b_Dept) {
+		super();
+		PersonID = personID;
+		Name = name;
+		Sex = sex;
+		Birth = birth;
+		Nat = nat;
+		Address = address;
+		DeptID = deptID;
+		Salary = salary;
+		Assess = assess;
+		Other = other;
+		B_Dept = b_Dept;
+	}
+=======
+>>>>>>> 9a486f8a117b7afd7682fedf1a0ceadbfe126562
 	public long getPersonID() {
 		return PersonID;
 	}
