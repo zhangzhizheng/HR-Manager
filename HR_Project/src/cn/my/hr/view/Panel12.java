@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,7 +21,7 @@ import javax.swing.JTextField;
  * @author 409
  *
  */
-public class Panel12 extends JPanel{
+public class Panel12 extends JPanel implements ActionListener,ItemListener{
 	//JPanel pTitle;  //标题区域面板
 	JPanel pContent;  //添加人员信息内容区域面板
 	JScrollPane js;   //添加人员信息所在的滚动面板
@@ -219,6 +223,7 @@ public class Panel12 extends JPanel{
 		cons.gridwidth = 2;
 		cons.insets = new Insets(10,5,10,10);
 		layout.setConstraints(btnUpdate, cons);
+		btnUpdate.setEnabled(false);//不可用
 		pContent.add(btnUpdate);
 		//清空
 		btnClear = new JButton("清空");
@@ -229,5 +234,30 @@ public class Panel12 extends JPanel{
 		cons.insets = new Insets(10,80,10,10);
 		layout.setConstraints(btnClear, cons);
 		pContent.add(btnClear);
+		
+	}
+	public void addListener(){
+		btnUpdate.addActionListener(this);
+		btnClear.addActionListener(this);
+		comboPerson.addItemListener(this);
+	}
+	/**
+	 * 实现下拉列表发生的事件响应
+	 */
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getStateChange()==ItemEvent.SELECTED){
+			String tempString=""+e.getItem();//获取被选中人信息
+			int i=tempString.indexOf("-");//找字符串位置
+			String personID =""+tempString.substring(0, 1);//查找编号
+			
+			
+		}
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	} 
 }

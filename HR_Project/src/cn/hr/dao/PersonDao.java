@@ -8,9 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.management.Query;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+
+import com.mchange.v2.c3p0.impl.NewPooledConnection;
 
 import cn.hr.model.Dept;
 import cn.hr.model.Person;
@@ -51,7 +55,9 @@ public class PersonDao {
 				         person.getSalary(),person.getAssess(),person.getOther()};
 		try {
 			quer.update(sql, params);
+			JOptionPane.showMessageDialog(null,"成功添加一条新的记录");
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null,"信息添加失败","错误",JOptionPane.ERROR_MESSAGE);
 			throw new RuntimeException(e);
 		}
 	}
@@ -66,8 +72,10 @@ public class PersonDao {
 			         person.getSalary(),person.getAssess(),person.getOther(),person.getPersonID()};
 			try {
 				quer.update(sql, params);
+				JOptionPane.showMessageDialog(null,"成功修改信息");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null,"信息修改失败","错误",JOptionPane.ERROR_MESSAGE);
 				throw new RuntimeException(e);
 			}
 			
@@ -82,8 +90,10 @@ public class PersonDao {
 			Object params[] ={PersonID};
 			try {
 				quer.update(sql, params);
+				JOptionPane.showMessageDialog(null,"成功删除信息");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(null,"信息删除失败","错误",JOptionPane.ERROR_MESSAGE);
 				throw new RuntimeException(e);
 			}
 	}
@@ -96,25 +106,23 @@ public class PersonDao {
 		return 0;
 		
 	}
+	//待修改
 	/**
 	 * 以“编号”、”姓名“的形式来查询所有员工的信息
 	 * @return
 	 */
-	public String[] getNamewithId(){
-		List<Person> list=new LinkedList<Person>();
-	    String []data=null;
-		Person person=new Person();
+	public List<Person> getNamewithId(){
 	    QueryRunner quer=new QueryRunner(JdbcUtils.getDataSource());
-		String sql="select * from Person where PersonID=? and Name=?";
-	
-		Object params[] ={person.getPersonID(),person.getName()};
+		//String sql="select * from Person where PersonID=? and Name=?";
+		String sql="select * from Person";
+		//Object params[] ={person.getPersonID(),person.getName()};
 	    try {
-			quer.update(sql, params);
+			return  (List<Person>) quer.query(sql,new BeanListHandler(Person.class));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			throw new RuntimeException(e);
 		}
-		return null;
+		
 		
 	}
 	/**
@@ -125,7 +133,14 @@ public class PersonDao {
 	public long getDeptId(long PersonID){
 		 QueryRunner quer=new QueryRunner(JdbcUtils.getDataSource());
 			String sql="select DeptID from Person where PersonID=?";
-			Object params[] ={PersonID};
+//			Object params[] ={PersonID};
+			try {
+				//return (long)quer.query(sql,new BeanHandler<Long>(Long.class));
+				return 0;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return 0;
 	}
 	/**

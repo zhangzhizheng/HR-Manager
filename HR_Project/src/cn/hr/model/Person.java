@@ -32,6 +32,18 @@ public class Person {
 		Other = other;
 		B_Dept = b_Dept;
 	}
+	public Person(long personID, String name, String sex, String birth, String nat, String address, String b_Dept,
+			 String other) {
+		super();
+		PersonID = personID;
+		Name = name;
+		Sex = sex;
+		Birth = birth;
+		Nat = nat;
+		Address = address;
+		Other = other;
+		B_Dept = b_Dept;
+	}
 	public long getPersonID() {
 		return PersonID;
 	}

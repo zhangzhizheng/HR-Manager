@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 
 import cn.hr.dao.DeptDao;
 import cn.hr.dao.PersonDao;
+import cn.hr.model.Person;
 /**
  * 添加人员信息
  * @author 409
@@ -277,6 +278,7 @@ public class Panel11 extends JPanel implements ActionListener{
 		//添加信息
 		if(e.getSource()==btnAdd){
 			PersonDao personDao=new PersonDao();
+			Person person=new Person(Long.valueOf(tfPersonId.getText()).longValue(),tfName.getText(),tfSex.getText(),tfBirth.getText(),tfNat.getText(),tfAddress.getText(),comboDept.getSelectedItem().toString(),tfOther.getText());
 			personDao.addPerson(person);
 		}
 		

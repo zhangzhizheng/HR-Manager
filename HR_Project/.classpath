@@ -10,5 +10,7 @@
 	<classpathentry kind="lib" path="src/ucanaccess-4.0.2.jar"/>
 	<classpathentry kind="lib" path="src/hsqldb.jar"/>
 	<classpathentry kind="lib" path="src/c3p0-0.9.5.1.jar"/>
+	<classpathentry kind="lib" path="src/commons-beanutils-1.9.2.jar"/>
+	<classpathentry kind="lib" path="src/commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
