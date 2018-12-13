@@ -344,7 +344,7 @@ public class PersonDao {
 				Person person=new Person();
 				data[i][0]=String.valueOf(rs.getLong("PersonID"));
 				data[i][1]=rs.getString("Name");
-				data[i][2]=rs.getString("Birth");
+				data[i][2]=rs.getString("Sex");
 				data[i][3]=rs.getString("DeptID");
 				data[i][4]=rs.getString("Salary");
 				data[i][5]=String.valueOf(rs.getString("Assess"));
