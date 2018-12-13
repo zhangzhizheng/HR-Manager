@@ -8,7 +8,7 @@ public class HistoryDao {
 	 * @param type
 	 * @return
 	 */
-	public String[][] getAllByType(String ChgTime){
+	public String[][] getAllByType(String type){
 		return null;
 		
 	}
@@ -33,7 +33,7 @@ public class HistoryDao {
 	 * @param type
 	 * @return
 	 */
-	public int getChangeCount(long DeptID,String ChgTime){
+	public int getChangeCount(long DeptID,String type){
 		return 0;
 		
 	}

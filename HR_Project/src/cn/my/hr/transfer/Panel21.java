@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import cn.hr.dao.PersonDao;
 /**
  * 人员调动面板
  * @author Administrator
@@ -45,7 +47,9 @@ public class Panel21 extends JPanel implements  ActionListener{
 	//bottom
 	private JButton btnChangeDept;
 	private JButton btnClear;
-	
+	String []colTitle=new String[] {"工号","姓名"
+			,"性别","部门","薪酬","考核信息"};
+	String [][]colvalue=null;
 	public Panel21() {
 		setLayout(new BorderLayout());
 		initTop();
@@ -66,16 +70,8 @@ public class Panel21 extends JPanel implements  ActionListener{
 		cons.gridy = 0;
 		gridBag.setConstraints(lbTitle, cons);
 		pTop.add(lbTitle);
-		String []colTitle=new String[] {"工号","姓名"
-				,"性别","部门","薪酬","考核信息"};
-		String [][]colvalue=new String[10][6];
+		String [][]colvalue=PersonDao.getPersonChange();
 		table =new JTable(colvalue,colTitle);
-		colvalue[0][0]="12";
-		colvalue[0][1]="李四";
-		colvalue[0][2]="男";
-		colvalue[0][3]="教务处";
-		colvalue[0][4]="5000";
-		colvalue[0][5]="优秀";
 		//设置表格默认大小
 		table.setPreferredScrollableViewportSize(new  Dimension(430,300));
 		table.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);

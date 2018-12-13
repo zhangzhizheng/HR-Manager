@@ -7,12 +7,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -67,12 +66,6 @@ public class Panel11 extends JPanel implements ActionListener{
 		cons.gridy = 1;
 		gridBag.setConstraints(js, cons);
 		add(js);
-        try {
-			addListener();//添加监听
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	public void initContent() {
 		//创建内容面板并设置布局方式
@@ -99,6 +92,7 @@ public class Panel11 extends JPanel implements ActionListener{
 		cons.gridy = 0;
 		cons.insets = new Insets(10,1,10,15);
 		layout.setConstraints(tfPersonId, cons);
+		tfPersonId.setEnabled(false);
 		pContent.add(tfPersonId);
 		//人员姓名标签
 		JLabel lbName = new JLabel("人员姓名");
@@ -115,6 +109,8 @@ public class Panel11 extends JPanel implements ActionListener{
 		cons.gridy = 0;
 		cons.insets = new Insets(10,1,10,10);
 		layout.setConstraints(tfName, cons);
+		Long  pid=PersonDao.getNextId();
+		tfPersonId.setText(String.valueOf(pid));
 		pContent.add(tfName);
 		
 		//添加第2行组件（性别标签、性别文本框、出生年月标签、出生年月文本框）
@@ -152,7 +148,6 @@ public class Panel11 extends JPanel implements ActionListener{
 		cons.insets = new Insets(10,1,10,10);
 		layout.setConstraints(tfBirth, cons);
 		pContent.add(tfBirth);
-		
 		//添加第3行组件（民族标签、民族文本框、地址标签、地址文本框）
 		//民族标签
 		JLabel lbNat = new JLabel("民族");
@@ -186,7 +181,6 @@ public class Panel11 extends JPanel implements ActionListener{
 		cons.insets = new Insets(10,1,10,10);
 		layout.setConstraints(tfAddress, cons);
 		pContent.add(tfAddress);
-		
 		//添加第4行组件（部门标签、部门下拉列表、其他标签、其他文本框）
 		//部门标签
 		JLabel lbDept = new JLabel("部门");
@@ -198,18 +192,14 @@ public class Panel11 extends JPanel implements ActionListener{
 		pContent.add(lbDept);
 		//部门下拉列表
 		comboDept = new JComboBox<String>();
+		String [] depts=DeptDao.getDeptsForSelect();
+		for (int i = 0; i < depts.length; i++) {
+			comboDept.addItem(depts[i]);
+		}
 		cons = new GridBagConstraints();
 		cons.gridx = 1;
 		cons.gridy = 3;
 		cons.insets = new Insets(10,1,10,15);
-		
-		DeptDao deptDao = new DeptDao();
-		try {
-			String[] values = deptDao.getDeptsForSelect();//获取部门列表
-			comboDept = new JComboBox(values);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
 		layout.setConstraints(comboDept, cons);
 		pContent.add(comboDept);
 		//其他标签
@@ -248,39 +238,48 @@ public class Panel11 extends JPanel implements ActionListener{
 		cons.insets = new Insets(10,10,10,10);
 		layout.setConstraints(btnClear, cons);
 		pContent.add(btnClear);
-	}
-	/**
-	 * 为按钮添加监听器
-	 * @throws Exception
-	 */
-	public void addListener() throws Exception{
 		btnAdd.addActionListener(this);
 		btnClear.addActionListener(this);
-	}
-	/**
-	 * 点击清空按钮，清空文本框所有值
-	 */
-	public void setNull(){
-		tfPersonId.setText(null);
-		tfName.setText(null);
-		tfSex.setText(null);
-		tfBirth.setText(null);
-		tfAddress.setText(null);
-		tfOther.setText(null);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		//清空执行的事件
+		if(e.getSource()==btnAdd) {
+			//从界面获取数据
+			Long  pid=PersonDao.getNextId();
+			//tfPersonId.setEnabled(true);
+			String name=tfName.getText();
+			String sex=tfSex.getText();
+			String birth=tfBirth.getText();
+			String nat=tfNat.getText();
+			String address=tfAddress.getText();
+			String DeptName=comboDept.getSelectedItem().toString();
+			String other=tfOther.getText();
+			String[] deptParts=DeptName.split("-");
+			String deptid=deptParts[0];
+			//数据校验
+			//封装Person对象
+		    Person p=new Person();
+		    p.setPersonID(pid);
+		    p.setName(name);
+		    p.setSex(sex);
+		    p.setBirth(birth);
+		    p.setNat(nat);
+		    p.setAddress(address);
+		    p.setDeptID(Long.parseLong(deptid));
+		    p.setOther(other);
+		    p.setAssess("未考核");
+		    //添加到数据库
+		   PersonDao.addPerson(p);
+		   JOptionPane.showMessageDialog(null, "添加人员成功");
+		   }
 		if(e.getSource()==btnClear){
-			setNull();
+			tfName.setText(null);
+			tfBirth.setText(null);
+			tfAddress.setText(null);
+			tfNat.setText(null);
+			tfOther.setText(null);
+			tfSex.setText(null);
 		}
-		//添加信息
-		if(e.getSource()==btnAdd){
-			PersonDao personDao=new PersonDao();
-			Person person=new Person(Long.valueOf(tfPersonId.getText()).longValue(),tfName.getText(),tfSex.getText(),tfBirth.getText(),tfNat.getText(),tfAddress.getText(),comboDept.getSelectedItem().toString(),tfOther.getText());
-			personDao.addPerson(person);
-		}
-		
 	} 
 }

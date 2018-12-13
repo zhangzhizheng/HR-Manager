@@ -1,5 +1,7 @@
 package cn.my.hr.view;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,10 +16,15 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import cn.hr.dao.DeptDao;
+import cn.hr.dao.PersonDao;
 /**
  * 删除信息
  * @author Administrator
@@ -35,10 +42,6 @@ public class Panel13 extends JPanel implements  ActionListener{
 	//center
 	private JLabel lbPersonId;  //人员编号
 	private JLabel lbName;  //姓名
-	private JLabel lbSex;   //性别
-	private JLabel lbBirth;  //出生日期
-	private JLabel lbNat;    //民族
-	private JLabel lbAddress; //地址
 	private JLabel lbDeptName1;   //其他说明
 	
 	private JTextField tfPersonId;
@@ -46,7 +49,9 @@ public class Panel13 extends JPanel implements  ActionListener{
 	private JTextField tfDeptName1;
 	//bottom
 	private JButton btnDelete;
-	
+	String []colTitle=new String[] {"编号","姓名"
+			,"出生年月","民族","地址","部门"};
+	String [][]colvalue=null;
 	public Panel13() {
 		setLayout(new BorderLayout());
 		initTop();
@@ -69,14 +74,8 @@ public class Panel13 extends JPanel implements  ActionListener{
 		pTop.add(lbTitle);
 		String []colTitle=new String[] {"编号","姓名"
 				,"出生年月","民族","地址","部门"};
-		String [][]colvalue=new String[10][6];
+		String [][]colvalue=PersonDao.getAllForBasic();
 		table =new JTable(colvalue,colTitle);
-		colvalue[0][0]="1";
-		colvalue[0][1]="张三";
-		colvalue[0][2]="1997-1-1";
-		colvalue[0][3]="汉族";
-		colvalue[0][4]="北京";
-		colvalue[0][5]="办公室-综合科";
 		//设置表格默认大小
 		table.setPreferredScrollableViewportSize(new  Dimension(430,300));
 		table.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
@@ -124,8 +123,15 @@ public class Panel13 extends JPanel implements  ActionListener{
 	btnDelete=new JButton("删除");
 	pBottom.add(btnDelete);
 	add(pBottom,BorderLayout.SOUTH);
+	btnDelete.addActionListener(this);
 	
 }
+    private void updateTable() {
+    	PersonDao personDao=new PersonDao();
+    	colvalue=PersonDao.getAllForBasic();
+    	DefaultTableModel tableModel=new DefaultTableModel(colvalue,colTitle);
+    	table.setModel(tableModel);
+    }
 	@Override
 	public void actionPerformed(ActionEvent arg1) {
 		// TODO Auto-generated method stub
@@ -133,6 +139,10 @@ public class Panel13 extends JPanel implements  ActionListener{
 			tfDeptName1.setText("2");
 			tfDeptName1.setText(null);
 			tfDeptName1.setText(null);
+			String personid=tfPersonId.getText();
+			PersonDao.deletePerson(Long.parseLong(personid));
+			JOptionPane.showMessageDialog(null, "删除成功");
+			updateTable();//表格更新
 		}
 	}
 }

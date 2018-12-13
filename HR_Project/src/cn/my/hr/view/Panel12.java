@@ -13,9 +13,14 @@ import java.awt.event.ItemListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import cn.hr.dao.DeptDao;
+import cn.hr.dao.PersonDao;
+import cn.hr.model.Person;
 /**
  * 修改人员信息
  * @author 409
@@ -89,6 +94,7 @@ public class Panel12 extends JPanel implements ActionListener,ItemListener{
 		cons.gridy = 0;
 		cons.insets = new Insets(10,1,10,15);
 		layout.setConstraints(tfPersonId, cons);
+		tfPersonId.setEnabled(false);//编号设为不可用
 		pContent.add(tfPersonId);
 		//人员姓名标签
 		JLabel lbName = new JLabel("人员姓名");
@@ -208,6 +214,10 @@ public class Panel12 extends JPanel implements ActionListener,ItemListener{
  		pContent.add(lbPerson);
  		//选择人员文本框
  		comboPerson = new JComboBox<String>();
+ 		String [] persons=PersonDao.getNamewithId();
+		for (int i = 0; i < persons.length; i++) {
+			comboPerson.addItem(persons[i]);
+		}
  		cons = new GridBagConstraints();
  		cons.gridx = 1;
  		cons.gridy = 4;
@@ -223,7 +233,7 @@ public class Panel12 extends JPanel implements ActionListener,ItemListener{
 		cons.gridwidth = 2;
 		cons.insets = new Insets(10,5,10,10);
 		layout.setConstraints(btnUpdate, cons);
-		btnUpdate.setEnabled(false);//不可用
+		btnUpdate.setEnabled(false);
 		pContent.add(btnUpdate);
 		//清空
 		btnClear = new JButton("清空");
@@ -234,30 +244,65 @@ public class Panel12 extends JPanel implements ActionListener,ItemListener{
 		cons.insets = new Insets(10,80,10,10);
 		layout.setConstraints(btnClear, cons);
 		pContent.add(btnClear);
-		
-	}
-	public void addListener(){
 		btnUpdate.addActionListener(this);
 		btnClear.addActionListener(this);
 		comboPerson.addItemListener(this);
 	}
-	/**
-	 * 实现下拉列表发生的事件响应
-	 */
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getStateChange()==ItemEvent.SELECTED){
-			String tempString=""+e.getItem();//获取被选中人信息
-			int i=tempString.indexOf("-");//找字符串位置
-			String personID =""+tempString.substring(0, 1);//查找编号
-			
-			
-		}
-	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getSource()==btnUpdate) {
+			
+			//修改
+			String pid=tfPersonId.getText();
+			String name=tfName.getText();
+			String sex=tfSex.getText();
+			String birth=tfBirth.getText();
+			String nat=tfNat.getText();
+			String address=tfAddress.getText();
+			String other=tfOther.getText();
+			Person p=new Person();
+			p.setPersonID(Long.parseLong(pid));
+			p.setName(name);
+			p.setSex(sex);
+			p.setBirth(birth);
+			p.setNat(nat);
+			p.setAddress(address);
+		    p.setOther(other);
+			p.setAssess("未考核");
+			PersonDao.updatePerson(p);
+			JOptionPane.showMessageDialog(null, "修改成功");
+			
+		}
+		if(e.getSource()==btnClear){
+			//把界面所填信息清空
+			tfPersonId.setText(null);
+			tfName.setText(null);
+			tfBirth.setText(null);
+			tfAddress.setText(null);
+			tfNat.setText(null);
+			tfOther.setText(null);
+			tfSex.setText(null);
+		}
 		
+	}
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getStateChange()==ItemEvent.SELECTED) {
+			String temp = "" + e.getItem();   //获取被选中的信息
+			int i = temp.indexOf("-");           //找到'-'所在的位置，然后进行求字串的操作
+			String pId = ""+ temp.substring(0,i);    //查找该编号人员的所有信息
+			String []info=PersonDao.getInfoById(Long.parseLong(pId));
+			tfPersonId.setText(info[0]);
+			tfName.setText(info[1]);
+			tfSex.setText(info[2]);
+			tfBirth.setText(info[3]);
+			tfNat.setText(info[4]);
+			tfAddress.setText(info[5]);
+			tfOther.setText(info[6]);
+			btnUpdate.setEnabled(true);
+			
+		}
 	} 
 }
