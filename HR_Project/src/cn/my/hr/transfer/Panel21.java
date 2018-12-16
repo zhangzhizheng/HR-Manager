@@ -155,6 +155,7 @@ public class Panel21 extends JPanel implements  ActionListener{
 			String deptid=deptParts[0];
 			PersonDao.updateChangeDept(pid,Long.parseLong(deptid));
 			updateTable();
+			
 			String oldDept=PersonDao.getDepts(Long.parseLong(deptid));
 			String newDept=deptParts[1]+deptParts[2];
 			Date date=new Date();

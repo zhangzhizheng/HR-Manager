@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import cn.hr.dao.HistoryDao;
 /**
  * 调动历史查询
  * @author Administrator
@@ -51,7 +53,7 @@ public class Panel22 extends JPanel {
 		cons.gridy = 0;
 		gridBag.setConstraints(lbTitle, cons);
 		pTop.add(lbTitle);
-		colvalue=new String[10][6];
+		colvalue=HistoryDao.getAllByType("人员调动");
 		table =new JTable(colvalue,colTitle);
 		//设置表格默认大小
 		table.setPreferredScrollableViewportSize(new  Dimension(430,300));
