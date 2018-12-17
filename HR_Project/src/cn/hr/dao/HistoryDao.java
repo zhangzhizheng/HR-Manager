@@ -1,9 +1,13 @@
 package cn.hr.dao;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -21,27 +25,53 @@ public class HistoryDao {
 		Connection conn = DBUtils.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		List<History> list=new LinkedList<History>();
 	    String [][] data=null;
-	    data=new String [35] [6];
-	    int i=0;
+	    String personname=null;
+	    String olddept=null;
+	    String departsString=null;
+	    String newdept=null;
 		//执行SQL语句
-		String sql = "select JourNo,PersonID,OldInfo,NewInfo,RegDate,ChgTime from Histroy where FromAcc=?";
+		String sql = "select JourNo,PersonID,OldInfo,NewInfo,ChgTime,RegDate from Histroy where FromAcc=?";
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1,FromAcc);
 			rs = ps.executeQuery();
 			while(rs.next()){
-				rs.getLong("JourNo");
-				rs.getLong("PersonID");
-				rs.getLong("OldInfo");
-				rs.getLong("NewInfo");
-				rs.getString("RegDate");
-				rs.getLong("ChgTime");
+				History h=new History();
+				h.setJourNo(String.valueOf(rs.getLong("JourNo")));
+				h.setPersonID(rs.getLong("PersonID"));
+				//nameid=rs.getLong("PersonID");
+				h.setOldInfo(String.valueOf(rs.getLong("OldInfo")));
+				//deptid1=rs.getLong("OldInfo");
+				h.setNewInfo(String.valueOf(rs.getLong("NewInfo")));
+				//deptid2=rs.getLong("NewInfo");
+				h.setChgTime(String.valueOf(rs.getLong("ChgTime")));
+				h.setRegDate(rs.getString("RegDate"));
+				list.add(h);
+				//System.out.println(list.toString());
 			}
+			data=new String [list.size()] [6];
+			for(int i=0;i<list.size();i++) {
+				data[i][0]=String.valueOf(list.get(i).getJourNo());
+				//personname=PersonDao.getName(rs.getLong("PersonID"));
+				data[i][1]="0";
+				System.out.println(personname);
+			    olddept=DeptDao.getDeptsForId(Long.parseLong(rs.getString("OldInfo")));
+				data[i][2]=olddept;
+				System.out.println(olddept);
+				//newdept=DeptDao.getDeptsForId(rs.getString("NewInfo"));
+				data[i][3]=newdept;
+				System.out.println(newdept);
+				data[i][4]=list.get(i).getChgTime();
+				data[i][5]=list.get(i).getRegDate();
+				
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "查询异常");
+			JOptionPane.showMessageDialog(null, "查询历史失败");
 		}
 		//关闭相关资源
 		finally {
@@ -56,15 +86,63 @@ public class HistoryDao {
 	 * 变动历史添加
 	 * @param h
 	 */
-	public void addHistory(History h){
+	public static void addHistory(History h){
+		Connection conn=DBUtils.getConnection();
+		String sql="insert into Histroy(JourNo,FromAcc,OldInfo,NewInfo,RegDate,ChgTime,PersonID) "
+				+ "values(?,?,?,?,?,?,?)";
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			ps=conn.prepareStatement(sql);
+			ps.setString(1, h.getJourNo());
+			ps.setString(2, h.getFromAcc());
+			ps.setString(3,h.getOldInfo());
+			ps.setString(4, h.getNewInfo());
+			ps.setString(5, h.getRegDate());
+			ps.setString(6, h.getChgTime());
+			ps.setLong(7, h.getPersonID());
+			ps.executeUpdate();
+			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			//关闭连接
+			DBUtils.close(rs);
+			DBUtils.close(ps);
+			DBUtils.close(conn);
+		}
 		
 	}
 	/**
 	 * 获取新的编号
 	 * @return
 	 */
-	public long getNextId(){
-		return 0;
+	public static long getNextId(){
+		long nextId=0;
+		Connection conn=DBUtils.getConnection();
+		String sql="select max(JourNo) as maxid from Histroy";
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			ps=conn.prepareStatement(sql);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				nextId=rs.getLong("maxid");
+			}
+			nextId+=1;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			//关闭连接
+			DBUtils.close(ps);
+			DBUtils.close(conn);
+		}
+		System.out.println(nextId);
+		return nextId;
 		
 	}
 	/**
@@ -73,18 +151,18 @@ public class HistoryDao {
 	 * @param type
 	 * @return
 	 */
-	public static int getChangeCount(long DeptID,String type){
+	public static long  getChangeCount(String type,long PersonID){
 		//获取连接
 		Connection conn = DBUtils.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-	    String [][] data=null;
-	    data=new String [35] [6];
-	    int i=0;
+		long ChgTime=0;
 		//执行SQL语句
-		String sql = "select JourNo,FromAcc,Birth,Nat,Address,DeptID from Histroy where FromAcc=?"; 
+		String sql = "select ChgTime from Histroy where FromAcc=? and PersonID=?"; 
 		try {
 			ps = conn.prepareStatement(sql);
+			ps.setString(1, type);
+			ps.setLong(2, PersonID);
 			rs = ps.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -92,31 +170,7 @@ public class HistoryDao {
 		//处理查询结果
 		try {
 			while(rs.next()) {
-				//rowCount++;
-				Person person=new Person();
-				data[i][0]=String.valueOf(rs.getLong("PersonID"));
-				data[i][1]=rs.getString("Name");
-				data[i][2]=rs.getString("Birth");
-				data[i][3]=rs.getString("Nat");
-				data[i][4]=rs.getString("Address");
-				data[i][5]=String.valueOf(rs.getString("DeptID"));
-				if (data[i][5].equals("0")) {
-					data[i][5]="未分配部门";
-				}
-				else {
-					String sql2="select B_Dept,S_Dept from Dept where DeptId=?";
-					ps=conn.prepareStatement(sql2);
-					ps.setLong(1, Long.parseLong(rs.getString("DeptID")));
-					ResultSet rs2=ps.executeQuery();
-					if(rs2!=null){
-						if(rs2.next()){
-							data[i][5]=rs2.getString("B_Dept")+"-"+rs2.getString("S_Dept");
-						}
-						//data[i][5]=rs2.getString("B_Dept")+"-"+rs2.getString("S_Dept");
-					}
-				}
-				
-				i++;
+				ChgTime=rs.getLong("ChgTime");
 			}
 			 // data=new String [rowCount] [6];
 			
@@ -130,7 +184,7 @@ public class HistoryDao {
 			DBUtils.close(ps);
 			DBUtils.close(conn);
 		}
-		return 0;
+		return ChgTime;
 		
 	}
 	/**

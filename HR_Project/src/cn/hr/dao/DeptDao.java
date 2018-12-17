@@ -146,6 +146,7 @@ public class DeptDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "删除异常");
 		}
 		//关闭相关资源
 		finally {
@@ -231,6 +232,48 @@ public class DeptDao {
 			DBUtils.close(conn);
 		}
 		return data;
+	}
+	/**
+	 * 通过id查找部门组合
+	 * @return
+	 */
+	public static String getDeptsForId(long DeptID){
+		Connection conn = DBUtils.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+	    String  departString=null;
+		//执行SQL语句
+		String sql = "select B_Dept,S_Dept from Dept where DeptID=?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setLong(1, DeptID);
+			rs = ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		//处理查询结果
+		try {
+			while(rs.next()) {
+				departString=rs.getString("B_Dept")+"-"+rs.getString("S_Dept");
+				System.out.println(departString);
+			}
+//			data=new String [list.size()];
+//			for(int i=0;i<list.size();i++) {
+//				String B_Dept=list.get(i).getB_Dept();
+//				String S_Dept=list.get(i).getS_Dept();
+//				data[i]=B_Dept+"-"+S_Dept;
+//			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "查询异常");
+		}
+		//关闭相关资源
+		finally {
+			DBUtils.close(rs);
+			DBUtils.close(ps);
+			DBUtils.close(conn);
+		}
+		return departString;
 	}
 
 }

@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import org.junit.Test;
+
 import cn.hr.model.Dept;
 import cn.hr.model.Person;
 import cn.hr.utils.DBUtils;
@@ -371,23 +373,44 @@ public class PersonDao {
 		Connection conn=DBUtils.getConnection();
 		PreparedStatement ps=null;
 		ResultSet rs=null;
-		String data=null;
+		long DeptID=0;
 		String sql2="select DeptID from Person where PersonID=?";
 		try {
 			ps=conn.prepareStatement(sql2);
-			ps.setLong(1,rs.getLong("DeptID"));
-			ResultSet rs2=ps.executeQuery();
-			if(rs2!=null){
-				if(rs2.next()){
-						data=rs2.getString("B_Dept")+"-"+rs2.getString("S_Dept");
-				}
+			ps.setLong(1,PersonID);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				DeptID=rs.getLong("DeptID");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return 0;
-		
+		return DeptID;
+	}
+	/**
+	 * 通过id获取姓名
+	 * @param PersonID
+	 * @return
+	 */
+	public static String getName(long PersonID){
+		Connection conn=DBUtils.getConnection();
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		String Name=null;
+		String sql2="select Name from Person where PersonID=?";
+		try {
+			ps=conn.prepareStatement(sql2);
+			ps.setLong(1,PersonID);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				Name=rs.getString("Name");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Name;
 	}
 	/**
 	 * 通过部门编号获取部门组合

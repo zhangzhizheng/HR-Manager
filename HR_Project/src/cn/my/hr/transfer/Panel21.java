@@ -26,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import cn.hr.dao.DeptDao;
 import cn.hr.dao.HistoryDao;
 import cn.hr.dao.PersonDao;
+import cn.hr.model.History;
 /**
  * 人员调动面板
  * @author Administrator
@@ -150,19 +151,38 @@ public class Panel21 extends JPanel implements  ActionListener{
 		}
 		if(arg1.getSource()==btnChangeDept){
 			long pid=Long.parseLong(PersonID);
+			long olddeptid=PersonDao.getDeptId(pid);
 			String deptchange=CoDeptName2.getSelectedItem().toString();
 			String[] deptParts=deptchange.split("-");
-			String deptid=deptParts[0];
-			PersonDao.updateChangeDept(pid,Long.parseLong(deptid));
+			String newdeptid=deptParts[0];//新ID
+			PersonDao.updateChangeDept(pid,Long.parseLong(newdeptid));
 			updateTable();
-			
-			String oldDept=PersonDao.getDepts(Long.parseLong(deptid));
-			String newDept=deptParts[1]+deptParts[2];
+		
+			String journo=String.valueOf(HistoryDao.getNextId());//流水号
+			System.out.println(journo);
 			Date date=new Date();
 			//时间格式转换
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String changetime=sdf.format(date);
-			HistoryDao.getChangeCount(Long.parseLong(deptid), "人员调动");
+			History h=new History();
+			h.setJourNo(journo);
+			h.setOldInfo(String.valueOf(olddeptid));//通过选中的人的id获取部门id
+//			System.out.println("结果");
+//			System.out.println(olddeptid+","+newdeptid+","+String.valueOf(HistoryDao.getChangeCount("人员调动", pid)+1)+","+PersonID);
+			h.setNewInfo(newdeptid);
+			h.setChgTime(String.valueOf(HistoryDao.getChangeCount("人员调动", pid)+1));//获取变动次数加一
+			h.setPersonID(pid);
+			h.setFromAcc("人员调动");
+			h.setRegDate(changetime);
+			HistoryDao.addHistory(h);//更改历史
+			
+		
+			
+		
+			//HistoryDao.getChangeCount(Long.parseLong(deptid), "人员调动");
+			String oldDept=PersonDao.getDepts(pid);//旧ID获取旧部门
+			String newDept=deptParts[1]+"-"+deptParts[2];
+			
 			
 			
 			
