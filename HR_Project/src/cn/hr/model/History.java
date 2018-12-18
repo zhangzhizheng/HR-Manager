@@ -7,14 +7,14 @@ public class History {
 	private String NewInfo;//新类型
 	private String RegDate;//变更时间
 	private String ChgTime;//改变次数
-	private long PersonID;//员工编号
+	private String PersonID;//员工编号
 	private String name;//姓名
 	public History() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public History(String jourNo, String fromAcc, String oldInfo, String newInfo, String regDate, String chgTime,
-			long personID, String name) {
+			String personID, String name) {
 		super();
 		JourNo = jourNo;
 		FromAcc = fromAcc;
@@ -61,10 +61,10 @@ public class History {
 	public void setChgTime(String chgTime) {
 		ChgTime = chgTime;
 	}
-	public long getPersonID() {
+	public String getPersonID() {
 		return PersonID;
 	}
-	public void setPersonID(long personID) {
+	public void setPersonID(String personID) {
 		PersonID = personID;
 	}
 	public String getName() {

@@ -171,7 +171,7 @@ public class Panel21 extends JPanel implements  ActionListener{
 //			System.out.println(olddeptid+","+newdeptid+","+String.valueOf(HistoryDao.getChangeCount("人员调动", pid)+1)+","+PersonID);
 			h.setNewInfo(newdeptid);
 			h.setChgTime(String.valueOf(HistoryDao.getChangeCount("人员调动", pid)+1));//获取变动次数加一
-			h.setPersonID(pid);
+			h.setPersonID(PersonID);
 			h.setFromAcc("人员调动");
 			h.setRegDate(changetime);
 			HistoryDao.addHistory(h);//更改历史

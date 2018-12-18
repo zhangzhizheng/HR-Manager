@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
@@ -22,7 +24,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import cn.hr.dao.HistoryDao;
 import cn.hr.dao.PersonDao;
+import cn.hr.model.History;
 /**
  *劳资分配管理
  * @author Administrator
@@ -148,6 +152,25 @@ public class Panel41 extends JPanel implements  ActionListener{
 			PersonDao.updateSalary(pid, salary);
 			JOptionPane.showMessageDialog(null, "修改成功");
 			updateTable();
+			
+			String journo=String.valueOf(HistoryDao.getNextId());//流水号
+			System.out.println(journo);
+			Date date=new Date();
+			//时间格式转换
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String changetime=sdf.format(date);
+			History h=new History();
+			h.setJourNo(journo);
+			h.setOldInfo(tfOldSalary.getText());//通过选中的人的id获取部门id
+//			System.out.println("结果");
+//			System.out.println(olddeptid+","+newdeptid+","+String.valueOf(HistoryDao.getChangeCount("人员调动", pid)+1)+","+PersonID);
+			h.setNewInfo(tfNewSalary.getText());
+			h.setChgTime(String.valueOf(HistoryDao.getChangeCount("劳资分配", pid)+1));//获取变动次数加一
+			h.setPersonID(PersonID);
+			System.out.println(PersonID);
+			h.setFromAcc("劳资分配");
+			h.setRegDate(changetime);
+			HistoryDao.addHistory(h);//更改历史
 			tfNewSalary.setText(null);
 		}
 		if(arg1.getSource()==btnClear){

@@ -27,9 +27,6 @@ public class HistoryDao {
 		ResultSet rs = null;
 		List<History> list=new LinkedList<History>();
 	    String [][] data=null;
-	    String personname=null;
-	    String olddept=null;
-	    String departsString=null;
 	    String newdept=null;
 		//执行SQL语句
 		String sql = "select JourNo,PersonID,OldInfo,NewInfo,ChgTime,RegDate from Histroy where FromAcc=?";
@@ -40,29 +37,32 @@ public class HistoryDao {
 			while(rs.next()){
 				History h=new History();
 				h.setJourNo(String.valueOf(rs.getLong("JourNo")));
-				h.setPersonID(rs.getLong("PersonID"));
+				h.setPersonID(PersonDao.getName(rs.getLong("PersonID")));//通过id转换成对应的人员的名字存到对象里
 				//nameid=rs.getLong("PersonID");
-				h.setOldInfo(String.valueOf(rs.getLong("OldInfo")));
+				h.setOldInfo(DeptDao.getDeptsForId(Long.parseLong(rs.getString("OldInfo"))));
 				//deptid1=rs.getLong("OldInfo");
-				h.setNewInfo(String.valueOf(rs.getLong("NewInfo")));
+				h.setNewInfo(DeptDao.getDeptsForId(Long.parseLong(rs.getString("NewInfo"))));
 				//deptid2=rs.getLong("NewInfo");
 				h.setChgTime(String.valueOf(rs.getLong("ChgTime")));
 				h.setRegDate(rs.getString("RegDate"));
+				//System.out.println(PersonDao.getName(rs.getLong("PersonID")));
 				list.add(h);
 				//System.out.println(list.toString());
+				
 			}
 			data=new String [list.size()] [6];
 			for(int i=0;i<list.size();i++) {
 				data[i][0]=String.valueOf(list.get(i).getJourNo());
 				//personname=PersonDao.getName(rs.getLong("PersonID"));
-				data[i][1]="0";
-				System.out.println(personname);
-			    olddept=DeptDao.getDeptsForId(Long.parseLong(rs.getString("OldInfo")));
-				data[i][2]=olddept;
-				System.out.println(olddept);
+				//System.out.println(PersonDao.getName(rs.getLong("PersonID")));
+				data[i][1]=String.valueOf(list.get(i).getPersonID());
+				//System.out.println(personname);
+			   // olddept=DeptDao.getDeptsForId(Long.parseLong(rs.getString("OldInfo")));
+				data[i][2]=list.get(i).getOldInfo();
+				//System.out.println(olddept);
 				//newdept=DeptDao.getDeptsForId(rs.getString("NewInfo"));
-				data[i][3]=newdept;
-				System.out.println(newdept);
+				data[i][3]=list.get(i).getNewInfo();
+				//System.out.println(newdept);
 				data[i][4]=list.get(i).getChgTime();
 				data[i][5]=list.get(i).getRegDate();
 				
@@ -100,12 +100,13 @@ public class HistoryDao {
 			ps.setString(4, h.getNewInfo());
 			ps.setString(5, h.getRegDate());
 			ps.setString(6, h.getChgTime());
-			ps.setLong(7, h.getPersonID());
+			ps.setString(7, h.getPersonID());
 			ps.executeUpdate();
 			conn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("插入历史正常");
 		}
 		finally {
 			//关闭连接
@@ -113,6 +114,136 @@ public class HistoryDao {
 			DBUtils.close(ps);
 			DBUtils.close(conn);
 		}
+		
+	}
+	/**
+	 * 考核历史查询
+	 * @param FromAcc
+	 * @return
+	 */
+	public static String[][] getAllAssess(String FromAcc){
+		//获取连接
+		Connection conn = DBUtils.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<History> list=new LinkedList<History>();
+	    String [][] data=null;
+		//执行SQL语句
+		String sql = "select JourNo,PersonID,OldInfo,NewInfo,ChgTime,RegDate from Histroy where FromAcc=?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1,FromAcc);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				History h=new History();
+				h.setJourNo(String.valueOf(rs.getLong("JourNo")));
+				h.setPersonID(PersonDao.getName(rs.getLong("PersonID")));//通过id转换成对应的人员的名字存到对象里
+				//nameid=rs.getLong("PersonID");
+				h.setOldInfo(rs.getString("OldInfo"));
+				//deptid1=rs.getLong("OldInfo");
+				h.setNewInfo(rs.getString("NewInfo"));
+				//deptid2=rs.getLong("NewInfo");
+				h.setChgTime(String.valueOf(rs.getLong("ChgTime")));
+				h.setRegDate(rs.getString("RegDate"));
+				list.add(h);
+				//System.out.println(list.toString());
+				
+			}
+			data=new String [list.size()] [6];
+			for(int i=0;i<list.size();i++) {
+				data[i][0]=String.valueOf(list.get(i).getJourNo());
+				//personname=PersonDao.getName(rs.getLong("PersonID"));
+				//System.out.println(PersonDao.getName(rs.getLong("PersonID")));
+				data[i][1]=String.valueOf(list.get(i).getPersonID());
+				//System.out.println(personname);
+			   // olddept=DeptDao.getDeptsForId(Long.parseLong(rs.getString("OldInfo")));
+				data[i][2]=list.get(i).getOldInfo();
+				//System.out.println(olddept);
+				//newdept=DeptDao.getDeptsForId(rs.getString("NewInfo"));
+				data[i][3]=list.get(i).getNewInfo();
+				//System.out.println(newdept);
+				data[i][4]=list.get(i).getChgTime();
+				data[i][5]=list.get(i).getRegDate();
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "查询历史失败");
+		}
+		//关闭相关资源
+		finally {
+			DBUtils.close(rs);
+			DBUtils.close(ps);
+			DBUtils.close(conn);
+		}
+		return data;
+		
+	}
+	/**
+	 * 劳资分配历史查询
+	 * @param FromAcc
+	 * @return
+	 */
+	public static String[][] getAllSalary(String FromAcc){
+		//获取连接
+		Connection conn = DBUtils.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<History> list=new LinkedList<History>();
+	    String [][] data=null;
+		//执行SQL语句
+		String sql = "select JourNo,PersonID,OldInfo,NewInfo,ChgTime,RegDate from Histroy where FromAcc=?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1,FromAcc);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				History h=new History();
+				h.setJourNo(String.valueOf(rs.getLong("JourNo")));
+				h.setPersonID(PersonDao.getName(rs.getLong("PersonID")));//通过id转换成对应的人员的名字存到对象里
+				//nameid=rs.getLong("PersonID");
+				h.setOldInfo(rs.getString("OldInfo"));
+				//deptid1=rs.getLong("OldInfo");
+				h.setNewInfo(rs.getString("NewInfo"));
+				//deptid2=rs.getLong("NewInfo");
+				h.setChgTime(String.valueOf(rs.getLong("ChgTime")));
+				h.setRegDate(rs.getString("RegDate"));
+				list.add(h);
+				//System.out.println(list.toString());
+				
+			}
+			data=new String [list.size()] [6];
+			for(int i=0;i<list.size();i++) {
+				data[i][0]=String.valueOf(list.get(i).getJourNo());
+				//personname=PersonDao.getName(rs.getLong("PersonID"));
+				//System.out.println(PersonDao.getName(rs.getLong("PersonID")));
+				data[i][1]=String.valueOf(list.get(i).getPersonID());
+				//System.out.println(personname);
+			   // olddept=DeptDao.getDeptsForId(Long.parseLong(rs.getString("OldInfo")));
+				data[i][2]=list.get(i).getOldInfo();
+				//System.out.println(olddept);
+				//newdept=DeptDao.getDeptsForId(rs.getString("NewInfo"));
+				data[i][3]=list.get(i).getNewInfo();
+				//System.out.println(newdept);
+				data[i][4]=list.get(i).getChgTime();
+				data[i][5]=list.get(i).getRegDate();
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "查询历史失败");
+		}
+		//关闭相关资源
+		finally {
+			DBUtils.close(rs);
+			DBUtils.close(ps);
+			DBUtils.close(conn);
+		}
+		return data;
 		
 	}
 	/**

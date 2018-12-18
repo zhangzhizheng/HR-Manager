@@ -12,7 +12,6 @@ public class DBUtils {
 		try {
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
 			conn = DriverManager.getConnection("jdbc:ucanaccess://Hr.accdb");
-			System.out.println("数据库连接成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("数据库连接失败");

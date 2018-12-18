@@ -1,5 +1,7 @@
 package cn.my.hr.transfer;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import cn.hr.dao.HistoryDao;
 /**
  * 考核历史查询
  * @author Administrator
@@ -32,6 +36,9 @@ public class Panel32 extends JPanel {
 	//定义上部所需组件
 	private JScrollPane js;
 	private JTable table;
+	String []colTitle=new String[] {"流水号","人员姓名"
+			,"上次考核","本次考核","变更次数","变更日期"};
+	String [][]colvalue=null;
 	public Panel32() {
 		setLayout(new BorderLayout());
 		initTop();
@@ -50,16 +57,8 @@ public class Panel32 extends JPanel {
 		cons.gridy = 0;
 		gridBag.setConstraints(lbTitle, cons);
 		pTop.add(lbTitle);
-		String []colTitle=new String[] {"流水号","人员姓名"
-				,"上次考核","本次考核","变更次数","变更日期"};
-		String [][]colvalue=new String[10][6];
+		String [][]colvalue=HistoryDao.getAllAssess("人员考核");
 		table =new JTable(colvalue,colTitle);
-		colvalue[0][0]="14";
-		colvalue[0][1]="张三";
-		colvalue[0][2]="未考核";
-		colvalue[0][3]="合格";
-		colvalue[0][4]="2";
-		colvalue[0][5]="2018-12-1";
 		//设置表格默认大小
 		table.setPreferredScrollableViewportSize(new  Dimension(430,300));
 		table.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
