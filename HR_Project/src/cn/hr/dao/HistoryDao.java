@@ -323,8 +323,23 @@ public class HistoryDao {
 	 * @param DeptID
 	 * @return
 	 */
-	public boolean hasData(long DeptID){
-		return false;
-		
+	public static boolean hasData(long PersonID){
+		boolean flag=true;
+			Connection conn=DBUtils.getConnection();
+			PreparedStatement ps=null;
+			ResultSet rs=null;
+			String sql2="select * from Person where PersonID=?";
+			try {
+				ps=conn.prepareStatement(sql2);
+				ps.setLong(1,PersonID);
+				rs=ps.executeQuery();
+				while(rs.next()){
+					flag=false;
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return flag;
 	}
 }

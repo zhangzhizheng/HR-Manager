@@ -63,7 +63,7 @@ public class DeptDao {
 		
 	}
 	/**
-	 * //插入信息
+	 * //插入一个新的部门信息
 	 */
 	public static void add(Dept dept){
 		//获取数据库连接
@@ -94,13 +94,6 @@ public class DeptDao {
 	 */
 	public static String[][] getDeptsFortable(){
 		return null;
-	}
-	/**
-	 * 向数据库添加一个数据库
-	 * @param dept
-	 */
-	public static void addDept(Dept dept){
-		
 	}
 	/**
 	 * 修改特定部门编号的部门数据
@@ -255,7 +248,6 @@ public class DeptDao {
 		try {
 			while(rs.next()) {
 				departString=rs.getString("B_Dept")+"-"+rs.getString("S_Dept");
-				System.out.println(departString);
 			}
 //			data=new String [list.size()];
 //			for(int i=0;i<list.size();i++) {

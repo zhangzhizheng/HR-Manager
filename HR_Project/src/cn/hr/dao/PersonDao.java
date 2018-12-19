@@ -28,6 +28,7 @@ public class PersonDao {
 				PreparedStatement ps = null;
 				ResultSet rs = null;
 			    String [][] data=null;
+			    List<Person> list=new LinkedList<Person>();
 			    int rowCount = 0; 
 			    data=new String [35] [6];
 			    int i=0;
@@ -43,7 +44,16 @@ public class PersonDao {
 				try {
 					while(rs.next()) {
 						//rowCount++;
-						Person person=new Person();
+//						Person person=new Person();
+//						person.setPersonID(rs.getLong("PersonID"));
+//						person.setName(rs.getString("Name"));
+//						person.setBirth(rs.getString("Birth"));
+//						person.setNat(rs.getString("Nat"));
+//						person.setAddress(rs.getString("Address"));
+//						person.setDeptID(Long.parseLong(rs.getString("DeptID")));
+//						list.add(person);
+						
+						
 						data[i][0]=String.valueOf(rs.getLong("PersonID"));
 						data[i][1]=rs.getString("Name");
 						data[i][2]=rs.getString("Birth");
@@ -164,6 +174,10 @@ public class PersonDao {
 		try {
 			ps=conn.prepareStatement(sql);
 			ps.setLong(1, PersonID);
+			if(HistoryDao.hasData(PersonID)==false){
+				JOptionPane.showMessageDialog(null, "已有信息关联拒绝删除");
+				return ;
+			}
 			ps.executeUpdate();
 			conn.commit();
 		} catch (SQLException e) {
@@ -204,7 +218,6 @@ public class PersonDao {
 			DBUtils.close(ps);
 			DBUtils.close(conn);
 		}
-		System.out.println(nextId);
 		return nextId;
 	}
 	/**
@@ -524,13 +537,4 @@ public class PersonDao {
 			DBUtils.close(conn);
 		}
    	}
-    /**
-     * 查询所有员工的部门、考核信息和劳资信息
-     * @return
-     */
-    public static String[][] getAllForHistory(){
-    	
-		return null;
-    	
-    }
 }

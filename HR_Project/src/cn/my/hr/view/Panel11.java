@@ -60,7 +60,7 @@ public class Panel11 extends JPanel implements ActionListener{
 		//添加内容区域
 		initContent();  //初始化添加人员信息区域
 		js = new JScrollPane(pContent);
-		js.setPreferredSize(new Dimension(410, 380));
+		js.setPreferredSize(new Dimension(430, 380));
 		cons = new GridBagConstraints();
 		cons.gridx = 0;
 		cons.gridy = 1;

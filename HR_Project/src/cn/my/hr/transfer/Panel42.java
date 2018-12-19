@@ -55,7 +55,7 @@ public class Panel42 extends JPanel {
 		cons.gridy = 0;
 		gridBag.setConstraints(lbTitle, cons);
 		pTop.add(lbTitle);
-		String [][]colvalue=HistoryDao.getAllSalary("劳资分配");
+		String [][]colvalue=HistoryDao.getAllAssess("劳资分配");
 		table =new JTable(colvalue,colTitle);
 		//设置表格默认大小
 		table.setPreferredScrollableViewportSize(new  Dimension(430,300));
